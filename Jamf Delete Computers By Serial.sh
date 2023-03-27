@@ -63,7 +63,7 @@ if [[ -z $computersToDo ]]; then
   exit
 fi
 
-echo "WARNING: There are ${#computersToDoActive[@]} active computers (less than 14 days checkin) with the following Serial Numbers: $computersToDoActive"
+echo "WARNING: There are ${#computersToDoActive[@]} active computers (less than 14 days check-in) with the following serial numbers: $computersToDoActive"
 echo -n "Would you like to delete these active computers? [yes/NO]: "
 read deleteActive
 
@@ -76,11 +76,11 @@ fi
 echo
 echo "Deleting ${#computerIDs[@]} computers with the following computer IDs: $computerIDs"
 echo
-echo "Deleting ${#computersToDo[@]} computers with the following Serial Numbers: $computersToDo"
+echo "Deleting ${#computersToDo[@]} computers with the following serial numbers: $computersToDo"
 echo
 echo "${#computersMissing[@]} computers with the following serial numbers are not in Jamf: $computersMissing"
 echo
-echo -n "Are you sure you want to proceed? This action is irreversable. [yes/NO]: "
+echo -n "Are you sure you want to proceed? This action is irreversible. [yes/NO]: "
 read delete
 
 if [[ ${delete:l} != "yes" ]]; then
@@ -89,7 +89,7 @@ if [[ ${delete:l} != "yes" ]]; then
 fi
 
 for i in $computerIDs; do
-  echo -n "Deleting computer with ID $i..."
+  echo -n "Deleting computer with ID $i... "
   curlStatus=$(curl -s -o /dev/null -w "%{http_code}" -X DELETE "$jamfpro_url/JSSResource/computers/id/$i" -H "accept: application/xml" -H "Authorization: Bearer $authorizationToken")
   if [[ $curlStatus == 200 ]]; then
     echo "Success!"
@@ -100,6 +100,6 @@ for i in $computerIDs; do
 done
 echo
 echo "########## Summary ##########"
-echo "Deleted ${#computersToDo[@]} computers with the following Serial numbers: $computersToDo"
+echo "${#computersToDo[@]} computers with the following serial numbers were deleted: $computersToDo"
 echo
 echo "${#computersMissing[@]} computers with the following serial numbers are not in Jamf: $computersMissing"
